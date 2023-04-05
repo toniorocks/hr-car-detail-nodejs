@@ -1,0 +1,36 @@
+{
+  "name": "car-details",
+  "version": "1.0.0",
+  "description": "Challenge from TCS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest --forceExit\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/toniorocks/hr-car-detail-nodejs.git"
+  },
+  "keywords": [
+    "tcs",
+    "hackerrank",
+    "nodejs",
+    "node",
+    "challenge",
+    "solution"
+  ],
+  "author": "Marco Izaguirre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toniorocks/hr-car-detail-nodejs/issues"
+  },
+  "homepage": "https://github.com/toniorocks/hr-car-detail-nodejs#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
