@@ -84,7 +84,7 @@ carsRouter.delete('/cars/:id', async (req, res) => {
     if (!car) {
       return res.status(404).send({ message: 'Car not found' });
     }
-    res.status(200).send({ message: 'Car deleted successfully' });
+    res.status(200).send({ message: 'Deleted successfully' });
   } catch (err) {
     console.error(err);
     res.status(400).send({ message: 'Server error' });
