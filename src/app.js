@@ -8,7 +8,7 @@ const app = express();
 
 //setting up the app middlewares
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(carsRouter);
 
 module.exports = app;

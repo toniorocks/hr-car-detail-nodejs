@@ -18,42 +18,47 @@ carsRouter.post('/cars', (req, res) => {
 
   newCar.save()
     .then(car => {
-      res.status(201).send('Added a new car successfully');
+      res.status(201).send({message:'Added a new car successfully'});
     })
     .catch(err => {
-      res.status(400).send('Server error', err);
+      res.status(400).send({message:'Server error', err});
     });
 });
 
-carsRouter.get('/cars', (req, res, next) => {
+carsRouter.get('/cars', async (req, res, next) => {
   const { price, manufacturer, capacity, search } = req.query;
+  let query = {};
 
-  // construct Mongoose query object based on query params
-  const query = {};
-  if (manufacturer) {
-    query.manufacturer = manufacturer;
+  if (search) {
+    query = {
+      $or: [
+        { name: { $regex: search, $options: 'i' } },
+        { manufacturer: { $regex: search, $options: 'i' } },
+      ],
+    };
   }
+
   if (capacity) {
     query.capacity = capacity;
   }
-  if (search) {
-    query.$or = [{ name: { $regex: search, $options: 'i' } }, { manufacturer: { $regex: search, $options: 'i' } }];
+
+  if (manufacturer) {
+    query.manufacturer = manufacturer;
   }
 
-  // construct Mongoose sort object based on price query param
-  let sort = {};
-  if (price) {
-    sort.price = price === 'asc' ? 1 : -1;
-  }
-
-  // query the cars collection using Mongoose and return the filtered data
-  Car.find(query).sort(sort).exec((err, cars) => {
-    if (err) {
-      console.error(err);
-      return res.status(400).json({ error: 'Server error' });
+  try {
+    let cars;
+    if (price === 'asc') {
+      cars = await Car.find(query).sort({ price: 1 });
+    } else if (price === 'desc') {
+      cars = await Car.find(query).sort({ price: -1 });
+    } else {
+      cars = await Car.find(query);
     }
     res.status(200).json(cars);
-  });
+  } catch (err) {
+    res.status(400).send({message:'Error fetching cars', err});
+  }
 });
 
 carsRouter.patch('/cars/:id', async (req, res) => {
@@ -66,7 +71,7 @@ carsRouter.patch('/cars/:id', async (req, res) => {
     if (!car) {
       return res.status(400).send({ message: 'Car not found' });
     }
-    res.status(200).send(car);
+    res.status(200).send({message:"Updated successfully"});
   } catch (err) {
     console.error(err);
     res.status(400).send({ message: 'Server error' });
